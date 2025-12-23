@@ -30,7 +30,44 @@
 
 ## 快速开始
 
-### 方式一：使用 Docker Compose
+### 方式一：使用 Docker 部署 TigerGraph + 本地运行前后端
+
+1. **启动 TigerGraph 容器**
+```bash
+docker run -d -p 14022:22 -p 9000:9000 -p 14240:14240 \
+  --name tigergraph \
+  --ulimit nofile=1000000:1000000 \
+  -v ~/TigerGraph/data:/home/tigergraph/mydata \
+  -v tg-data:/home/tigergraph \
+  -t tigergraph/tigergraph:latest
+```
+
+2. **初始化 TigerGraph 图数据库**
+```bash
+cd scripts
+./init-tigergraph-docker.sh
+```
+
+3. **启动后端服务**
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+4. **启动前端服务**
+```bash
+cd frontend
+npm install
+npm start
+```
+
+5. **访问应用**
+- 前端: http://localhost:3000
+- 后端 API: http://localhost:8000
+- TigerGraph GUI: http://localhost:14240
+
+### 方式二：使用 Docker Compose
 
 1. 克隆项目
 ```bash
@@ -48,7 +85,7 @@ docker-compose up -d
 - 后端 API: http://localhost:8000
 - TigerGraph GUI: http://localhost:14240
 
-### 方式二：本地部署
+### 方式三：本地部署
 
 #### 1. 部署 TigerGraph 到 K8s 集群
 
