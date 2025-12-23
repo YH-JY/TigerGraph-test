@@ -1,6 +1,6 @@
-fastapi==0.104.1
+fastapi==0.109.2
 uvicorn==0.24.0
-pydantic==2.5.0
+pydantic>=2.9.0
 kubernetes==28.1.0
 pytigergraph==1.9.1
 python-dotenv==1.0.0
@@ -8,4 +8,4 @@ requests==2.31.0
 networkx==3.2.1
 matplotlib==3.8.2
 plotly==5.17.0
-pydantic-settings==2.1.0
+pydantic-settings>=2.1.0

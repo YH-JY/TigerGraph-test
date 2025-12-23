@@ -49,6 +49,23 @@ cd scripts
 ```
 
 3. **启动后端服务**
+
+如果遇到依赖冲突，运行修复脚本：
+
+**Windows:**
+```bash
+cd scripts
+fix-dependencies.bat
+```
+
+**Linux/Mac:**
+```bash
+cd scripts
+chmod +x fix-dependencies.sh
+./fix-dependencies.sh
+```
+
+或手动安装：
 ```bash
 cd backend
 pip install -r requirements.txt
