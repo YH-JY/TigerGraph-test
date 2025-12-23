@@ -34,8 +34,8 @@
 
 1. 克隆项目
 ```bash
-git clone <repository-url>
-cd k8s-native-security-platform
+git clone https://github.com/YH-JY/TigerGraph-test.git
+cd TigerGraph-test
 ```
 
 2. 启动服务
