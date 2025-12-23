@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - TIGERGRAPH_HOST=tigergraph
+      - TIGERGRAPH_PORT=9000
+    depends_on:
+      - tigergraph
+    volumes:
+      - ~/.kube:/root/.kube:ro
+    networks:
+      - k8s-security-net
+
+  tigergraph:
+    image: tigergraph/tigergraph:latest
+    ports:
+      - "9000:9000"
+      - "14240:14240"
+    environment:
+      - enable_firewall=false
+    volumes:
+      - tigergraph-data:/tigergraph/data
+    networks:
+      - k8s-security-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - k8s-security-net
+
+volumes:
+  tigergraph-data:
+
+networks:
+  k8s-security-net:
+    driver: bridge

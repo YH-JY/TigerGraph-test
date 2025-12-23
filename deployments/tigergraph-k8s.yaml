@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tigergraph
+  namespace: tigergraph
+  labels:
+    app: tigergraph
+spec:
+  serviceName: tigergraph
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tigergraph
+  template:
+    metadata:
+      labels:
+        app: tigergraph
+    spec:
+      containers:
+      - name: tigergraph
+        image: tigergraph/tigergraph:latest
+        ports:
+        - containerPort: 9000
+          name: rest
+        - containerPort: 14240
+          name: gui
+        - containerPort: 22
+          name: ssh
+        env:
+        - name: TIGERGRAPH_LICENSE
+          value: "YOUR_LICENSE_KEY"
+        - name: enable_firewall
+          value: "false"
+        volumeMounts:
+        - name: tigergraph-data
+          mountPath: /tigergraph/data
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+  volumeClaimTemplates:
+  - metadata:
+      name: tigergraph-data
+      namespace: tigergraph
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 100Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tigergraph-rest
+  namespace: tigergraph
+  labels:
+    app: tigergraph
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9000
+    targetPort: 9000
+    name: rest
+  selector:
+    app: tigergraph
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tigergraph-gui
+  namespace: tigergraph
+  labels:
+    app: tigergraph
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 14240
+    targetPort: 14240
+    name: gui
+  selector:
+    app: tigergraph
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tigergraph
