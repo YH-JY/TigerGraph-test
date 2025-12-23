@@ -20,11 +20,15 @@ class TigerGraphManager:
         try:
             self.conn = TigerGraphConnection(
                 host=self.host,
-                port=self.port,
                 username=self.username,
-                password=self.password,
-                graphname=self.graph_name
+                password=self.password
             )
+            
+            # Connect first
+            self.conn.connect()
+            
+            # Set the graph
+            self.conn.graphname = self.graph_name
             
             version = self.conn.getVersion()
             logger.info(f"Connected to TigerGraph version: {version}")
@@ -34,7 +38,16 @@ class TigerGraphManager:
 
     def clear_graph(self):
         try:
-            result = self.conn.runInstalledQuery("ClearGraph")
+            # Delete all vertices to clear the graph
+            result = self.conn.runInterpretedQuery("DELETE FROM K8sNode")
+            result = self.conn.runInterpretedQuery("DELETE FROM Pod")
+            result = self.conn.runInterpretedQuery("DELETE FROM Service")
+            result = self.conn.runInterpretedQuery("DELETE FROM Deployment")
+            result = self.conn.runInterpretedQuery("DELETE FROM ConfigMap")
+            result = self.conn.runInterpretedQuery("DELETE FROM Secret")
+            result = self.conn.runInterpretedQuery("DELETE FROM Namespace")
+            result = self.conn.runInterpretedQuery("DELETE FROM RBAC")
+            result = self.conn.runInterpretedQuery("DELETE FROM Container")
             logger.info("Graph cleared successfully")
             return result
         except Exception as e:
@@ -45,7 +58,8 @@ class TigerGraphManager:
         try:
             for vertex in vertices:
                 attributes = {k: v for k, v in vertex.items() if k != 'id'}
-                result = self.conn.upsertVertex(
+                # Use upsertVertexData instead of upsertVertex
+                result = self.conn.upsertVertexData(
                     vertexType=vertex_type,
                     vertexId=vertex['id'],
                     attributes=attributes
@@ -59,7 +73,7 @@ class TigerGraphManager:
     def insert_edges(self, edge_type: str, edges: List[Dict[str, Any]]):
         try:
             for edge in edges:
-                result = self.conn.upsertEdge(
+                result = self.conn.upsertEdgeData(
                     sourceVertexType=edge['from_type'],
                     sourceVertexId=edge['from_id'],
                     edgeType=edge_type,
@@ -253,8 +267,15 @@ class TigerGraphManager:
 
     def get_graph_statistics(self):
         try:
-            stats = self.conn.getStatistics()
-            return stats
+            # Use getEdgeStatistics and getVertexStatistics instead
+            vertex_stats = self.conn.getVertexStatistics()
+            edge_stats = self.conn.getEdgeStatistics()
+            return {
+                'vertexCount': sum(vertex_stats.values()) if vertex_stats else 0,
+                'edgeCount': sum(edge_stats.values()) if edge_stats else 0,
+                'vertexTypes': vertex_stats,
+                'edgeTypes': edge_stats
+            }
         except Exception as e:
             logger.error(f"Failed to get graph statistics: {e}")
             return None
