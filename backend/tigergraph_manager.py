@@ -21,15 +21,16 @@ class TigerGraphManager:
             # Build full URL with protocol
             host_url = self.host
             if not host_url.startswith('http://') and not host_url.startswith('https://'):
-                if self.port != 80:
-                    host_url = f'http://{self.host}:{self.port}'
-                else:
-                    host_url = f'http://{self.host}'
+                host_url = f'http://{self.host}'
+                # Don't add port if it's already included in config
+                # if self.port != 80:
+                #     host_url = f'http://{self.host}:{self.port}'
             
             self.conn = TigerGraphConnection(
                 host=host_url,
                 username=self.username,
-                password=self.password
+                password=self.password,
+                graphname=self.graph_name
             )
             
             # Connect first

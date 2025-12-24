@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Layout, Menu, Typography, theme } from 'antd';
 import {
   DashboardOutlined,
