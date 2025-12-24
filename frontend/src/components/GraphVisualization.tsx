@@ -75,7 +75,7 @@ const GraphVisualization: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const stylesheet = [
     {
