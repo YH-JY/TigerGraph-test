@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Table, Tag, Tabs, message, Spin, Space, Alert } from 'antd';
 import { SearchOutlined, ImportOutlined, ReloadOutlined } from '@ant-design/icons';
 import { discoverAssets, importAssets } from '../services/api.ts';
@@ -34,7 +34,7 @@ const AssetDiscovery: React.FC = () => {
   const handleImport = async () => {
     setImporting(true);
     try {
-      const result = await importAssets();
+      await importAssets();
       message.success('导入任务已启动，请稍后查看结果');
       
       // Poll for completion

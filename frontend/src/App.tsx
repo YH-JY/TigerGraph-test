@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu, Typography, theme } from 'antd';
 import {
   DashboardOutlined,
@@ -15,8 +15,10 @@ import GraphVisualization from './components/GraphVisualization.tsx';
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
-const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+const AppContent = () => {
+  const [collapsed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -44,6 +46,10 @@ const App: React.FC = () => {
     },
   ];
 
+  const handleMenuClick = ({ key }) => {
+    navigate(key);
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -53,11 +59,9 @@ const App: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['/']}
+          selectedKeys={[location.pathname]}
           items={menuItems}
-          onClick={({ key }) => {
-            window.location.hash = key;
-          }}
+          onClick={handleMenuClick}
         />
       </Sider>
       <Layout>
@@ -76,6 +80,14 @@ const App: React.FC = () => {
         </Content>
       </Layout>
     </Layout>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 };
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Button, Select, Switch, message, Spin, Space, Row, Col } from 'antd';
-import { ReloadOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { getGraphVisualization } from '../services/api.ts';
 
@@ -22,7 +22,7 @@ const GraphVisualization: React.FC = () => {
     Container: '#2f54eb',
   };
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const result = await getGraphVisualization();
@@ -75,7 +75,7 @@ const GraphVisualization: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const stylesheet = [
     {

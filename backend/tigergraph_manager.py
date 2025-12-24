@@ -33,7 +33,7 @@ class TigerGraphManager:
             )
             
             # Connect first
-            self.conn.connect()
+            # self.conn.connect()  # pyTigergraph doesn't have connect() method
             
             # Set the graph
             self.conn.graphname = self.graph_name
