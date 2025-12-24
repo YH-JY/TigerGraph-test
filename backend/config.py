@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     tigergraph_graph_name: str = "K8sSecurityGraph"
     
     # K8s Configuration
-    k8s_config_file: str = None
+    k8s_config_file: str | None = None
     k8s_in_cluster: bool = False
     
     # API Configuration
