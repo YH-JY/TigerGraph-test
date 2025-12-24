@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
+from contextlib import asynccontextmanager
 import logging
 from datetime import datetime
 
@@ -12,48 +13,15 @@ from tigergraph_manager import TigerGraphManager
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(
-    title="K8s Native Security Platform",
-    description="Platform for discovering K8s assets and analyzing attack paths",
-    version="1.0.0"
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # Global variables
 k8s_discovery = None
 tg_manager = None
 
-class DiscoveryResponse(BaseModel):
-    status: str
-    timestamp: datetime
-    assets: Dict[str, List[Dict[str, Any]]]
-
-class ImportResponse(BaseModel):
-    status: str
-    message: str
-    timestamp: datetime
-
-class QueryRequest(BaseModel):
-    source_type: Optional[str] = None
-    target_type: Optional[str] = None
-    max_depth: Optional[int] = 5
-
-class QueryResponse(BaseModel):
-    status: str
-    data: Optional[Dict[str, Any]] = None
-    error: Optional[str] = None
-
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     global k8s_discovery, tg_manager
     
+    # Startup
     try:
         k8s_discovery = K8sAssetDiscovery(
             config_file=settings.k8s_config_file,
@@ -74,6 +42,46 @@ async def startup_event():
         logger.info("TigerGraph manager initialized")
     except Exception as e:
         logger.error(f"Failed to initialize TigerGraph manager: {e}")
+    
+    yield
+    
+    # Shutdown
+    logger.info("Application shutdown")
+
+app = FastAPI(
+    title="K8s Native Security Platform",
+    description="Platform for discovering K8s assets and analyzing attack paths",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class DiscoveryResponse(BaseModel):
+    status: str
+    timestamp: datetime
+    assets: Dict[str, List[Dict[str, Any]]]
+
+class ImportResponse(BaseModel):
+    status: str
+    message: str
+    timestamp: datetime
+
+class QueryRequest(BaseModel):
+    source_type: Optional[str] = None
+    target_type: Optional[str] = None
+    max_depth: Optional[int] = 5
+
+class QueryResponse(BaseModel):
+    status: str
+    data: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
 
 @app.get("/")
 async def root():

@@ -18,8 +18,16 @@ class TigerGraphManager:
 
     def _connect(self):
         try:
+            # Build full URL with protocol
+            host_url = self.host
+            if not host_url.startswith('http://') and not host_url.startswith('https://'):
+                if self.port != 80:
+                    host_url = f'http://{self.host}:{self.port}'
+                else:
+                    host_url = f'http://{self.host}'
+            
             self.conn = TigerGraphConnection(
-                host=self.host,
+                host=host_url,
                 username=self.username,
                 password=self.password
             )
