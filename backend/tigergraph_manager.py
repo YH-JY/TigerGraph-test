@@ -1,4 +1,4 @@
-from pytigergraph import TigerGraphConnection
+from pyTigerGraph import TigerGraphConnection
 from typing import List, Dict, Any
 import logging
 import json
