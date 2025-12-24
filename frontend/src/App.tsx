@@ -7,10 +7,10 @@ import {
   ShareAltOutlined,
   SettingOutlined
 } from '@ant-design/icons';
-import Dashboard from './components/Dashboard';
-import AssetDiscovery from './components/AssetDiscovery';
-import AttackPaths from './components/AttackPaths';
-import GraphVisualization from './components/GraphVisualization';
+import Dashboard from './components/Dashboard.tsx';
+import AssetDiscovery from './components/AssetDiscovery.tsx';
+import AttackPaths from './components/AttackPaths.tsx';
+import GraphVisualization from './components/GraphVisualization.tsx';
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
