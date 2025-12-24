@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Statistic, Alert, Spin } from 'antd';
 import { CloudServerOutlined, DatabaseOutlined, SafetyCertificateOutlined, BranchesOutlined } from '@ant-design/icons';
-import { healthCheck, getStatistics } from '../services/api';
+import { healthCheck, getStatistics } from '../services/api.ts';
 
 const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);

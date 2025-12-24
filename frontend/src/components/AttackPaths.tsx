@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Select, Button, Table, Tag, Alert, Spin, Space, message } from 'antd';
 import { SearchOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { queryAttackPaths, getAssetTypes } from '../services/api';
+import { queryAttackPaths, getAssetTypes } from '../services/api.ts';
 import type { ColumnsType } from 'antd/es/table';
 
 interface AttackPath {

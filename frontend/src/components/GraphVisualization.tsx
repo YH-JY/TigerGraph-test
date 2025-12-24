@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Select, Switch, message, Spin, Space, Row, Col } from 'antd';
 import { ReloadOutlined, FullscreenOutlined } from '@ant-design/icons';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { getGraphVisualization } from '../services/api';
+import { getGraphVisualization } from '../services/api.ts';
 
 const GraphVisualization: React.FC = () => {
   const [graphData, setGraphData] = useState<any>(null);

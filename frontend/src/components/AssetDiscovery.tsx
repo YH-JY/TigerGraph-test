@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table, Tag, Tabs, message, Spin, Space, Alert } from 'antd';
 import { SearchOutlined, ImportOutlined, ReloadOutlined } from '@ant-design/icons';
-import { discoverAssets, importAssets } from '../services/api';
+import { discoverAssets, importAssets } from '../services/api.ts';
 import type { ColumnsType } from 'antd/es/table';
 
 interface Asset {
