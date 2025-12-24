@@ -83,7 +83,7 @@ const GraphVisualization: React.FC = () => {
       style: {
         backgroundColor: 'data(color)',
         label: showLabels ? 'data(label)' : '',
-        textValign: 'center',
+        textHalign: 'center',
         textHalign: 'center',
         color: 'white',
         fontSize: '10px',
